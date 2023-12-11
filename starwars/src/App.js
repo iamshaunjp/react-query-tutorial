@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import Navbar from './components/Navbar';
 import Planets from './components/Planets';
 import People from './components/People';
-import { ReactQueryDevtools } from 'react-query-devtools';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
 
+const queryClient = new QueryClient();
 
 function App() {
   let [page, setPage] = useState('planets');
@@ -14,10 +16,12 @@ function App() {
       <h1>Star Wars Info</h1>
         <Navbar setPage={setPage} />
         <div className="content">
-          { page === 'planets' ? <Planets /> : <People /> }
+          <QueryClientProvider client={queryClient}>
+            { page === 'planets' ? <Planets /> : <People /> }
+            <ReactQueryDevtools initialIsOpen={false} />
+          </QueryClientProvider>
         </div>
       </div>
-      <ReactQueryDevtools initialIsOpen={false} />
     </>
   );
 }
